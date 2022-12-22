@@ -25,7 +25,16 @@ void keyPressed() {
   //Second Play Button
   if ( key=='A' || key=='a' ) song1.loop(0);
   //
-  if ( key=='D' || key=='d') song1.play();
+  if ( key=='D' || key=='d' ) song1.play();
+  //
+  if ( key=='S' || key=='s' ) song1.pause();
+  //
+  if ( key=='W' || key=='w' ) song1.loop();
+  //
+  if ( key=='M' || key=='m')  {
+  //
+  if ( song1.isMuted() ) {} else {}
+  } 
 }
 //
 void mouseClicked() {
