@@ -7,35 +7,69 @@ import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 //
 //Global Variables
-Minim minim; //creates object to acess all functions.
+Minim minim; //creates object to access all functions
 AudioPlayer song1; //creates "Play List" variable holding extensions WAV, AIFF, AU, SND, and MP3
 //
 void setup () {
-  //size(500, 600);
-  minim = new Minim(this);
-  song1 = minim.loadFile("../Music/Used Music/God Rest Ye Merry Gentlmen - DJ Williams.mp3");
-}
+  //size(500, 600); //Remind you of Display Geometry
+  minim = new Minim(this); //load from data directory, loadFile should also load from project folder, like loadImage
+  song1 = minim.loadFile("../FreeWare Music/MusicDownload/groove.mp3"); //able to pass absolute path, file name & extension, and URL
+}//End setup
 //
 void draw() {
-}
+}//End draw
 //
 void keyPressed() {
   //Key Board Short Cuts
-  //First PLay Button
-  //Second Play Button
-  if ( key=='A' || key=='a' ) song1.loop(0);
+  //First Play Button
+  //if ( key=='P' || key=='p' ) song1.play(); //Parameter is milli-seconds from start of audio file to start playing
   //
-  if ( key=='D' || key=='d' ) song1.play();
+  //PLAY PAUSE STOP Feature
+  if ( key=='A' || key=='a' ) {
+    if ( song1.isPlaying() ) {
+      song1.pause();
+    } else if ( song1.position() >= song1.length()-song1.length()*1/5 ) {
+      song1.rewind();
+      song1.play();
+    } else {
+      song1.play(); //Parameter is milli-seconds from start of audio file to start playing
+    }
+  }//End PLAY PAUSE Feature
   //
-  if ( key=='S' || key=='s' ) song1.pause();
+  //Second Play Button, Loop ONCE
+  if ( key=='D' || key=='d'  ) song1.loop(1); //Parameter is Parameter is number of repeats
+  //Infinite Loop
+  if ( key=='W' || key=='w' ) song1.loop(); //Parameter is empty, means infinite looping (could be -1)
   //
-  if ( key=='W' || key=='w' ) song1.loop();
+  if ( key=='S' || key=='s' ) { //MUTE Button
+    //Note: Mute has NO built-in pause button and NO built-in rewind if the song is near the end of the file
+    //Note: this MUTE algorithm is not smart
+    //Known ERROR: once song plays, MUTE acts like it doesn't work
+    if ( song1.isMuted() ) { 
+      song1.unmute();
+    } else { 
+      song1.mute();
+    }
+  } //End MUTE Button
   //
-  if ( key=='M' || key=='m')  {
+  //Fast Forward & Fast Reverse
+  //Built in Question, .isPlaying(), not necessary
+  if ( key == 'C' || key == 'c' ) song1.skip( 1000 ); // skip forward 1 second (1000 milliseconds)
+  if ( key == 'Z' || key == 'z' ) song1.skip( -1000 ); // skip backwards 1 second, notice negative, (1000 milliseconds)
   //
-  if ( song1.isMuted() ) {} else {}
-  } 
-}
+  //STOP Button
+  if ( key == 'S' || key == 's' ) {
+    if ( song1.isPlaying() ) {
+      song1.pause();
+      song1.rewind(); //Cue SONG to play from beginning
+    } else {
+      song1.rewind(); //Not playing means song is paused or song position is at the end of the file
+    }
+  }//End STOP Button
+  //
+}//End keyPressed
 //
 void mouseClicked() {
-}
+}//End mousePressed
+//
+//End Main Program
